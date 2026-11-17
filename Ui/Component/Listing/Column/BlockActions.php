@@ -1,48 +1,21 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Ui\Component\Listing\Column;
 
-use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\UrlInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
-/**
- * BlockActions class.
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
- */
 class BlockActions extends Column
 {
     /**
      * Url path
      */
-    const URL_PATH_EDIT    = 'smile_retailer_promotion/promotion/edit';
-    const URL_PATH_DELETE  = 'smile_retailer_promotion/promotion/delete';
-
-    /**
-     * @var UrlInterface
-     */
-    protected $urlBuilder;
-
-    /**
-     * @var string
-     */
-    private $editUrl;
+    public const URL_PATH_EDIT    = 'smile_retailer_promotion/promotion/edit';
+    public const URL_PATH_DELETE  = 'smile_retailer_promotion/promotion/delete';
 
     /**
      * @param ContextInterface   $context            Application context
@@ -55,13 +28,11 @@ class BlockActions extends Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        UrlInterface $urlBuilder,
+        protected UrlInterface $urlBuilder,
         array $components = [],
         array $data = [],
-        $editUrl = self::URL_PATH_EDIT
+        private string $editUrl = self::URL_PATH_EDIT
     ) {
-        $this->urlBuilder = $urlBuilder;
-        $this->editUrl = $editUrl;
 
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
@@ -70,10 +41,8 @@ class BlockActions extends Column
      * Prepare Data Source
      *
      * @param array $dataSource The data source
-     *
-     * @return array
      */
-    public function prepareDataSource(array $dataSource)
+    public function prepareDataSource(array $dataSource): array
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
