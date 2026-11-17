@@ -1,41 +1,32 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Controller\Adminhtml\Promotion;
 
-use Smile\RetailerPromotion\Api\Data\PromotionInterfaceFactory;
+use Exception;
+use Magento\Backend\Model\Session;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Smile\RetailerPromotion\Api\Data\PromotionInterface;
 use Smile\RetailerPromotion\Controller\Adminhtml\AbstractPromotion;
 
 /**
  * Retailer Promotion Adminhtml Save controller.
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
  */
-class Save extends AbstractPromotion
+class Save extends AbstractPromotion implements HttpPostActionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $data         = $this->getRequest()->getPostValue();
+        /** @var \Magento\Framework\App\Request\Http $request */
+        $request      = $this->getRequest();
+        $data         = $request->getPostValue();
         $redirectBack = $this->getRequest()->getParam('back', false);
 
         if ($data) {
@@ -43,7 +34,8 @@ class Save extends AbstractPromotion
             $retailerIds = $this->getRequest()->getParam('retailer_id', ['0']);
 
             $media = false;
-            if (!empty($data[PromotionInterface::MEDIA_PATH])
+            if (
+                !empty($data[PromotionInterface::MEDIA_PATH])
                 && isset($data[PromotionInterface::MEDIA_PATH][0]['name'])
             ) {
                 $media = $data[PromotionInterface::MEDIA_PATH][0]['name'];
@@ -54,6 +46,7 @@ class Save extends AbstractPromotion
             $model = $this->promotionFactory->create();
 
             if ($identifier) {
+                /** @var \Smile\RetailerPromotion\Model\Promotion $model */
                 $model = $this->promotionRepository->get($identifier);
                 $retailerIds = [$model->getRetailerId()];
                 if (!$model->getId()) {
@@ -63,26 +56,26 @@ class Save extends AbstractPromotion
                 }
             }
 
-
             foreach ($retailerIds as $retailerId) {
                 $model->setData($data);
                 $model->setRetailerId($retailerId);
                 if ($media) {
-                    $model->setMediaPath($retailerId. '_' .$media);
+                    $model->setMediaPath($retailerId . '_' . $media);
                 }
 
                 try {
                     $this->promotionRepository->save($model);
-                    $model = $this->promotionFactory->create();
                     $this->messageManager->addSuccessMessage(__('You saved the promotion %1.', $model->getTitle()));
-                    $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                    $this->_objectManager->get(Session::class)->setFormData(false);
 
                     if ($redirectBack) {
                         return $resultRedirect->setPath('*/*/edit', ['id' => $model->getId()]);
                     }
-                } catch (\Exception $e) {
+
+                    $model = $this->promotionFactory->create();
+                } catch (Exception $e) {
                     $this->messageManager->addErrorMessage($e->getMessage());
-                    $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
+                    $this->_objectManager->get(Session::class)->setFormData($data);
 
                     return $resultRedirect->setPath('*/*/edit', ['id' => $model->getId()]);
                 }

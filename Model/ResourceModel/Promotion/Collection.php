@@ -1,39 +1,26 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Model\ResourceModel\Promotion;
 
-use \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Smile\RetailerPromotion\Model\Promotion;
 
 /**
  * Promotion Collection class
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
  */
 class Collection extends AbstractCollection
 {
     /**
      * Define resource model
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName) Method is inherited.
      *
-     * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName) Method is inherited.
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(
-            \Smile\RetailerPromotion\Model\Promotion::class,
+            Promotion::class,
             \Smile\RetailerPromotion\Model\ResourceModel\Promotion::class
         );
     }

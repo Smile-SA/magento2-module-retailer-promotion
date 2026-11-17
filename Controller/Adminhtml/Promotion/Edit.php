@@ -1,33 +1,22 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Controller\Adminhtml\Promotion;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Smile\RetailerPromotion\Controller\Adminhtml\AbstractPromotion;
+use Smile\RetailerPromotion\Model\Status\Source\Status;
 
 /**
  * Retailer Promotion Adminhtml Edit controller.
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
  */
-class Edit extends AbstractPromotion
+class Edit extends AbstractPromotion implements HttpGetActionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
@@ -38,7 +27,7 @@ class Edit extends AbstractPromotion
             try {
                 $promotion = $this->promotionRepository->get($promotionId);
 
-                if($promotion->getStatus() == \Smile\RetailerPromotion\Model\Status\Source\Status::STATUS_CENTRAL) {
+                if ($promotion->getStatus() == Status::STATUS_CENTRAL) {
                     $this->messageManager->addErrorMessage(__("You can't edit this central promotion."));
                     $resultRedirect = $this->resultRedirectFactory->create();
                     $resultRedirect->setPath('*/*/index');
@@ -64,6 +53,9 @@ class Edit extends AbstractPromotion
             }
         }
 
-        $this->_forward('create');
+        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+        $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+
+        return $resultForward->forward('create');
     }
 }

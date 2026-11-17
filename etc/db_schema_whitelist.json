@@ -1,0 +1,20 @@
+{
+    "smile_retailer_promotion": {
+        "column": {
+            "promotion_id": true,
+            "title": true,
+            "description": true,
+            "status": true,
+            "is_active": true,
+            "media_path": true,
+            "pdf": true,
+            "link": true,
+            "retailer_id": true,
+            "created_at": true,
+            "end_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

@@ -1,63 +1,43 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Model;
 
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem;
+use Exception;
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Smile\RetailerPromotion\Api\Data\PromotionInterface;
 
 /**
  * PromotionMediaUpload Model
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
  */
 class PromotionMediaUpload
 {
     /**
      * Image Uploader.
-     *
-     * @var ImageUploader
      */
-    protected $imageUploader;
+    protected ImageUploader $imageUploader;
 
     /**
      * Directory List.
-     *
-     * @var DirectoryList
      */
-    protected $directoryList;
+    protected DirectoryList $directoryList;
 
     /**
      * Core file storage database
-     *
-     * @var Database
      */
-    protected $coreFileStorageDatabase;
+    protected Database $coreFileStorageDatabase;
 
     /**
      * Media directory object (writable).
-     *
-     * @var WriteInterface
      */
-    protected $mediaDirectory;
+    protected WriteInterface $mediaDirectory;
 
     /**
      * PromotionMediaUpload constructor.
@@ -66,7 +46,6 @@ class PromotionMediaUpload
      * @param DirectoryList $directoryList           Directory List.
      * @param Database      $coreFileStorageDatabase File Storage Database.
      * @param Filesystem    $filesystem              File System.
-     *
      * @throws FileSystemException
      */
     public function __construct(
@@ -79,7 +58,7 @@ class PromotionMediaUpload
         $this->directoryList           = $directoryList;
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->mediaDirectory          = $filesystem->getDirectoryWrite(
-            \Magento\Framework\App\Filesystem\DirectoryList::MEDIA
+            DirectoryList::MEDIA
         );
     }
 
@@ -87,13 +66,11 @@ class PromotionMediaUpload
      * Remove media From Tmp Directory.
      *
      * @param PromotionInterface $promotion Promotion.
-     *
-     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function removeMediaFromTmp(PromotionInterface $promotion)
+    public function removeMediaFromTmp(PromotionInterface $promotion): void
     {
-        $media = str_replace($promotion->getRetailerId().'_', '', $promotion->getMediaPath());
+        $media = str_replace($promotion->getRetailerId() . '_', '', (string) $promotion->getMediaPath());
         $baseTmpPath = $this->imageUploader->getBaseTmpPath();
         if (!empty($media) && $this->pathExist($baseTmpPath, $media)) {
             $this->moveFileFromTmp($media, $promotion);
@@ -105,17 +82,16 @@ class PromotionMediaUpload
      *
      * @param string             $imageName Image name.
      * @param PromotionInterface $promotion Promotion.
-     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function moveFileFromTmp($imageName, $promotion)
+    public function moveFileFromTmp(string $imageName, PromotionInterface $promotion): void
     {
         $baseTmpPath = $this->imageUploader->getBaseTmpPath();
         $basePath = $this->imageUploader->getBasePath();
 
         $baseImagePath = $this->imageUploader->getFilePath(
             $basePath,
-            $promotion->getRetailerId().'_'.$imageName
+            $promotion->getRetailerId() . '_' . $imageName
         );
         $baseTmpImagePath = $this->imageUploader->getFilePath($baseTmpPath, $imageName);
 
@@ -128,8 +104,8 @@ class PromotionMediaUpload
                 $baseTmpImagePath,
                 $baseImagePath
             );
-        } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+        } catch (Exception $e) {
+            throw new LocalizedException(
                 __('Something went wrong while saving the file(s).')
             );
         }
@@ -139,15 +115,13 @@ class PromotionMediaUpload
      * Remove File.
      *
      * @param PromotionInterface $promotion Promotion.
-     *
-     * @return void
      * @throws FileSystemException
      */
-    public function removeMedia(PromotionInterface $promotion)
+    public function removeMedia(PromotionInterface $promotion): void
     {
-        $media = $promotion->getRetailerId().'_'.$promotion->getMediaPath();
+        $media = $promotion->getRetailerId() . '_' . $promotion->getMediaPath();
         $basePath = $this->imageUploader->getBasePath();
-        if (!empty($media) && $this->pathExist($basePath, $media)) {
+        if ($promotion->getMediaPath() && $this->pathExist($basePath, $media)) {
             $this->removeFile($media);
         }
     }
@@ -157,11 +131,9 @@ class PromotionMediaUpload
      *
      * @param string $basePath Base Path.
      * @param string $fileName File Name.
-     *
-     * @return bool
      * @throws FileSystemException
      */
-    public function pathExist($basePath, $fileName)
+    public function pathExist(string $basePath, string $fileName): bool
     {
         return file_exists($this->getPath($basePath, $fileName));
     }
@@ -171,11 +143,9 @@ class PromotionMediaUpload
      *
      * @param string $basePath Base Path.
      * @param string $fileName File Name.
-     *
-     * @return string
      * @throws FileSystemException
      */
-    public function getPath($basePath, $fileName)
+    public function getPath(string $basePath, string $fileName): string
     {
         return $this->directoryList->getPath(DirectoryList::MEDIA) .
             '/'
@@ -186,12 +156,9 @@ class PromotionMediaUpload
      * Remove File.
      *
      * @param string $fileName File Name.
-     *
-     * @return void
-     *
      * @throws FileSystemException
      */
-    public function removeFile($fileName)
+    public function removeFile(string $fileName): void
     {
         unlink($this->getPath($this->imageUploader->getBasePath(), $fileName));
     }

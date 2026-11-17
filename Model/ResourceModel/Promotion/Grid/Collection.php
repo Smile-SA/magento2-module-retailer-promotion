@@ -1,32 +1,22 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerPromotion\Model\ResourceModel\Promotion\Grid;
 
 use Magento\Customer\Ui\Component\DataProvider\Document;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Psr\Log\LoggerInterface as Logger;
 use Smile\RetailerPromotion\Api\Data\PromotionInterface;
+use Smile\RetailerPromotion\Model\ResourceModel\Promotion;
 
 /**
  * Promotion grid Collection class
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
  */
-class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
+class Collection extends SearchResult
 {
     /**
      * @inheritdoc
@@ -43,22 +33,16 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
     /**
      * Collection constructor.
      *
-     * @param EntityFactory $entityFactory
-     * @param Logger $logger
-     * @param FetchStrategy $fetchStrategy
-     * @param EventManager $eventManager
-     * @param string $mainTable
-     * @param string $resourceModel
-     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+    // phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod.Found -- adds default table/resource model
     public function __construct(
         EntityFactory $entityFactory,
         Logger $logger,
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
-        $mainTable = PromotionInterface::TABLE_NAME,
-        $resourceModel = \Smile\RetailerPromotion\Model\ResourceModel\Promotion::class
+        string $mainTable = PromotionInterface::TABLE_NAME,
+        string $resourceModel = Promotion::class
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }

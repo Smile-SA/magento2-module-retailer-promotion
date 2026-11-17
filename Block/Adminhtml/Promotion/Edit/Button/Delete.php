@@ -1,41 +1,24 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Block\Adminhtml\Promotion\Edit\Button;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Smile\RetailerPromotion\Block\Adminhtml\Promotion\Edit\AbstractButton;
 
-/**
- * Delete class
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
- */
 class Delete extends AbstractButton implements ButtonProviderInterface
 {
     /**
-     * get the button data
+     * Get the button data
      *
-     * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         $data = [];
         if ($this->getPromotionId()) {
-            $message = htmlentities(__('Are you sure you want to delete this Promotion ?'));
+            $message = htmlentities(__('Are you sure you want to delete this Promotion ?')->render());
 
             $data = [
                 'label'      => __('Delete Promotion'),
@@ -49,10 +32,11 @@ class Delete extends AbstractButton implements ButtonProviderInterface
     }
 
     /**
-     * @return string
+     * Get the delete URL.
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getDeleteUrl()
+    public function getDeleteUrl(): string
     {
         return $this->getUrl('*/*/delete', ['id' => $this->getPromotionId()]);
     }

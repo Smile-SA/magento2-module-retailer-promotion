@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="smile_retailer_promotion" resource="default" engine="innodb" comment="smile_retailer_promotion">
+        <column xsi:type="int" name="promotion_id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="varchar" name="title" nullable="false" length="255" comment="TITLE"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Description"/>
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" identity="false" default="0" comment="Status"/>
+        <column xsi:type="smallint" name="is_active" unsigned="true" nullable="false" identity="false" default="0" comment="IS_ACTIVE"/>
+        <column xsi:type="varchar" name="media_path" nullable="true" length="255" comment="Media file path"/>
+        <column xsi:type="varchar" name="pdf" nullable="true" length="255" comment="PDF"/>
+        <column xsi:type="varchar" name="link" nullable="true" length="255" comment="LINK"/>
+        <column xsi:type="int" name="retailer_id" unsigned="true" nullable="true" identity="false" comment="Retailer ID"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Creation Time"/>
+        <column xsi:type="timestamp" name="end_at" on_update="false" nullable="true" comment="End at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="promotion_id"/>
+        </constraint>
+    </table>
+</schema>

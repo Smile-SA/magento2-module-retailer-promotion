@@ -18,6 +18,7 @@
         <sequence>
             <module name="Magento_AdminGws"/>
             <module name="Smile_Retailer"/>
+            <module name="Smile_StoreLocator"/>
             <module name="Smile_Seller"/>
         </sequence>
     </module>

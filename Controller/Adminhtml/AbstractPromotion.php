@@ -1,60 +1,41 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
-use Smile\RetailerPromotion\Api\PromotionRepositoryInterface;
 use Smile\RetailerPromotion\Api\Data\PromotionInterfaceFactory;
+use Smile\RetailerPromotion\Api\PromotionRepositoryInterface;
 
 /**
  * Abstract Controller for retailer promotion management.
  *
  * @category Smile
- * @package  Smile\RetailerPromotion
  * @author   Fanny DECLERCK <fadec@smile.fr>
  */
 abstract class AbstractPromotion extends Action
 {
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory|null
-     */
-    protected $resultPageFactory = null;
+    protected ?PageFactory $resultPageFactory = null;
 
     /**
      * Core registry
-     *
-     * @var Registry
      */
-    protected $coreRegistry;
+    protected Registry $coreRegistry;
 
     /**
      * Promotion Repository
-     *
-     * @var PromotionRepositoryInterface
      */
-    protected $promotionRepository;
+    protected PromotionRepositoryInterface $promotionRepository;
 
     /**
      * Promotion Factory
-     *
-     * @var PromotionInterfaceFactory
      */
-    protected $promotionFactory;
+    protected PromotionInterfaceFactory $promotionFactory;
 
     /**
      * Abstract constructor.
@@ -82,10 +63,8 @@ abstract class AbstractPromotion extends Action
 
     /**
      * Create result page
-     *
-     * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function createPage()
+    protected function createPage(): Page
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
@@ -99,10 +78,8 @@ abstract class AbstractPromotion extends Action
      * Check if allowed to manage promotion
      *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     *
-     * @return bool
      */
-    protected function _isAllowed()
+    protected function _isAllowed(): bool
     {
         return $this->_authorization->isAllowed('Smile_RetailerPromotion::retailer_promotions');
     }
