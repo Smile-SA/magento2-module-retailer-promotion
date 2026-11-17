@@ -17,6 +17,7 @@ class Save extends AbstractPromotion implements HttpPostActionInterface
 {
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
