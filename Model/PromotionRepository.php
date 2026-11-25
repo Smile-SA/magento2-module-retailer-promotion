@@ -19,6 +19,9 @@ use Smile\RetailerPromotion\Api\PromotionRepositoryInterface;
 use Smile\RetailerPromotion\Model\ResourceModel\Promotion as PromotionResourceModel;
 use Smile\RetailerPromotion\Model\ResourceModel\Promotion\CollectionFactory as PromotionCollectionFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PromotionRepository implements PromotionRepositoryInterface
 {
     /**
