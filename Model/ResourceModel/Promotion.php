@@ -59,7 +59,7 @@ class Promotion extends AbstractDb
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function load(AbstractModel $object, mixed $value, mixed $field = null)
+    public function load(AbstractModel $object, $value, $field = null)
     {
         $promotionId = $this->getPromotionId($object, $value, $field);
         if ($promotionId) {
@@ -118,7 +118,7 @@ class Promotion extends AbstractDb
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getPromotionId(AbstractModel $object, mixed $value, ?string $field = null): int|false
+    private function getPromotionId(AbstractModel $object, $value, ?string $field = null)
     {
         $entityMetadata = $this->metadataPool->getMetadata(PromotionInterface::class);
         if ($field === null) {
