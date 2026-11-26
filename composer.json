@@ -14,8 +14,8 @@
         "magento/framework": ">=103.0.4 <103.0.6",
         "magento/module-store": "*",
         "magento/module-checkout": "*",
-        "smile/module-retailer": "^2.0",
-        "smile/module-store-locator": "^2.2"
+        "smile/module-retailer": "~2.0.5",
+        "smile/module-store-locator": "~2.2.5"
     },
     "require-dev": {
         "smile/magento2-smilelab-quality-suite": "^4.0"
