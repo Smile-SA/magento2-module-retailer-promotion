@@ -1,40 +1,24 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\RetailerPromotion\Model\Status\Source;
 
-/**
- * Status class
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
- */
-class Status implements \Magento\Framework\Data\OptionSourceInterface
+use Magento\Framework\Data\OptionSourceInterface;
+
+class Status implements OptionSourceInterface
 {
     /**#@+
      * Promotion's Statuses
      */
-    const STATUS_LOCAL = 1;
-    const STATUS_CENTRAL = 2;
+    public const STATUS_LOCAL = 1;
+    public const STATUS_CENTRAL = 2;
     /**#@-*/
 
     /**
      * Get options
-     *
-     * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         $availableOptions = $this->getAvailableStatuses();
         $options = [];
@@ -49,10 +33,8 @@ class Status implements \Magento\Framework\Data\OptionSourceInterface
 
     /**
      * Prepare promotion's statuses.
-     *
-     * @return array
      */
-    protected function getAvailableStatuses()
+    protected function getAvailableStatuses(): array
     {
         return [self::STATUS_LOCAL => __('Local'), self::STATUS_CENTRAL => __('Central')];
     }
