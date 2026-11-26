@@ -1,48 +1,19 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Cron;
 
-use Smile\RetailerPromotion\Api\PromotionRepositoryInterface;
-use Smile\RetailerPromotion\Api\Data\PromotionInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Smile\RetailerPromotion\Api\Data\PromotionInterface;
+use Smile\RetailerPromotion\Api\PromotionRepositoryInterface;
 
 /**
  * UpdateStatus cron for retailer promotion management.
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
  */
 class UpdateStatus
 {
-    /**
-     * @var PromotionRepositoryInterface
-     */
-    protected $promotionRepository;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var DateTime
-     */
-    protected  $date;
-
     /**
      * UpdateStatus constructor.
      *
@@ -51,20 +22,18 @@ class UpdateStatus
      * @param DateTime                     $date                  Date.
      */
     public function __construct(
-        PromotionRepositoryInterface $promotionRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        DateTime $date
+        protected PromotionRepositoryInterface $promotionRepository,
+        protected SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected DateTime $date
     ) {
-        $this->promotionRepository   = $promotionRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->date                  = $date;
     }
 
     /**
      * Execute task
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute()
+    public function execute(): void
     {
         $date = $this->date->gmtDate();
 
@@ -75,7 +44,7 @@ class UpdateStatus
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchResult = $this->promotionRepository->getList($searchCriteria)->getItems();
 
-        if(!empty($searchResult)) {
+        if (!empty($searchResult)) {
             foreach ($searchResult as $result) {
                 $result->setIsActive(false);
                 $this->promotionRepository->save($result);

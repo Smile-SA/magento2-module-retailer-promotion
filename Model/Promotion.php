@@ -1,64 +1,43 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Model;
 
-use Smile\RetailerPromotion\Api\Data\PromotionInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
+use Smile\RetailerPromotion\Api\Data\PromotionInterface;
 
 /**
  * Promotion Model
  *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName) properties are inherited.
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
  */
 class Promotion extends AbstractModel implements PromotionInterface, IdentityInterface
 {
-    /**
-     * @var string
-     */
-    const CACHE_TAG = self::TABLE_NAME;
+    public const CACHE_TAG = self::TABLE_NAME;
 
-    /**
-     * @var string
-     */
+    // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
     protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * Construct.
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init(\Smile\RetailerPromotion\Model\ResourceModel\Promotion::class);
     }
 
     /**
      * Get identities
-     *
-     * @return array
      */
-    public function getIdentities()
+    public function getIdentities(): array
     {
         return [self::CACHE_TAG . '_' . $this->getId(), self::CACHE_TAG . '_' . $this->getId()];
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getId()
     {
@@ -66,7 +45,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getTitle()
     {
@@ -74,7 +53,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getDescription()
     {
@@ -82,7 +61,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getStatus()
     {
@@ -90,7 +69,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getIsActive()
     {
@@ -98,7 +77,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getMediaPath()
     {
@@ -106,7 +85,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getPdf()
     {
@@ -114,7 +93,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getLink()
     {
@@ -122,7 +101,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getRetailerId()
     {
@@ -130,7 +109,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getCreatedAt()
     {
@@ -138,7 +117,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getEndAt()
     {
@@ -146,7 +125,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setId($id)
     {
@@ -154,7 +133,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setTitle($title)
     {
@@ -162,7 +141,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setDescription($description)
     {
@@ -170,7 +149,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setStatus($status)
     {
@@ -178,7 +157,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setIsActive($isActive)
     {
@@ -186,7 +165,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setMediaPath($path)
     {
@@ -194,7 +173,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setPdf($path)
     {
@@ -202,7 +181,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setLink($path)
     {
@@ -210,7 +189,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setRetailerId($retailerId)
     {
@@ -218,7 +197,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setCreatedAt($createdAt)
     {
@@ -226,7 +205,7 @@ class Promotion extends AbstractModel implements PromotionInterface, IdentityInt
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function setEndAt($endAt)
     {

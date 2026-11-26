@@ -1,22 +1,12 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Model\ResourceModel;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
@@ -26,33 +16,9 @@ use Smile\RetailerPromotion\Model\PromotionMediaUpload;
 
 /**
  * Promotion Resource Model
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
  */
 class Promotion extends AbstractDb
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
-     * @var MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
-     * @var DateTime
-     */
-    protected $dateTime;
-
-    /**
-     * @var PromotionMediaUpload
-     */
-    protected $mediaUpload;
-
     /**
      * Promotion constructor.
      *
@@ -65,22 +31,18 @@ class Promotion extends AbstractDb
      */
     public function __construct(
         Context $context,
-        EntityManager $entityManager,
-        MetadataPool $metadataPool,
-        DateTime $dateTime,
-        PromotionMediaUpload $mediaUpload,
-        $connectionName = null
+        protected EntityManager $entityManager,
+        protected MetadataPool $metadataPool,
+        protected DateTime $dateTime,
+        protected PromotionMediaUpload $mediaUpload,
+        ?string $connectionName = null
     ) {
-        $this->entityManager = $entityManager;
-        $this->metadataPool  = $metadataPool;
-        $this->dateTime      = $dateTime;
-        $this->mediaUpload   = $mediaUpload;
 
         parent::__construct($context, $connectionName);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getConnection()
     {
@@ -92,24 +54,23 @@ class Promotion extends AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object The promotion
      * @param mixed                                  $value  The value
-     * @param null                                   $field  The field, if any
-     *
+     * @param mixed                                  $field  The field, if any
      * @return $this
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function load(AbstractModel $object, $value, $field = null)
+    public function load(AbstractModel $object, mixed $value, mixed $field = null)
     {
         $promotionId = $this->getPromotionId($object, $value, $field);
         if ($promotionId) {
-            $this->entityManager->load($object, $promotionId);
+            $this->entityManager->load($object, (string) $promotionId);
         }
 
         return $this;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function save(AbstractModel $object)
     {
@@ -119,26 +80,26 @@ class Promotion extends AbstractDb
         }
 
         $this->entityManager->save($object);
+        /** @var \Smile\RetailerPromotion\Model\Promotion $object */
         $this->mediaUpload->removeMediaFromTmp($object);
 
         return $this;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function delete(AbstractModel $object)
     {
         $this->entityManager->delete($object);
+        /** @var \Smile\RetailerPromotion\Model\Promotion $object */
         $this->mediaUpload->removeMedia($object);
 
         return $this;
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName) Method is inherited.
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -153,13 +114,11 @@ class Promotion extends AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object The promotion
      * @param mixed                                  $value  The value
-     * @param null                                   $field  The field
-     *
-     * @return int|false
+     * @param string|null                            $field  The field
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getPromotionId(AbstractModel $object, $value, $field = null)
+    private function getPromotionId(AbstractModel $object, mixed $value, ?string $field = null): int|false
     {
         $entityMetadata = $this->metadataPool->getMetadata(PromotionInterface::class);
         if ($field === null) {
@@ -178,6 +137,6 @@ class Promotion extends AbstractDb
             $entityId = count($result) ? $result[0] : false;
         }
 
-        return $entityId;
+        return $entityId === false ? false : (int) $entityId;
     }
 }

@@ -1,16 +1,6 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Api\Data;
 
@@ -24,62 +14,62 @@ interface PromotionInterface
     /**
      * The table name
      */
-    const TABLE_NAME  = 'smile_retailer_promotion';
+    public const TABLE_NAME  = 'smile_retailer_promotion';
 
     /**
      * The promotion Id field
      */
-    const PROMOTION_ID  = 'promotion_id';
+    public const PROMOTION_ID  = 'promotion_id';
 
     /**
      * The promotion title field
      */
-    const TITLE       = 'title';
+    public const TITLE       = 'title';
 
     /**
      * The promotion description field
      */
-    const DESCRIPTION = 'description';
+    public const DESCRIPTION = 'description';
 
     /**
      * The promotion status field
      */
-    const STATUS      = 'status';
+    public const STATUS      = 'status';
 
     /**
      * The promotion is_active field
      */
-    const IS_ACTIVE   = 'is_active';
+    public const IS_ACTIVE   = 'is_active';
 
     /**
      * The promotion media_path field
      */
-    const MEDIA_PATH  = 'media_path';
+    public const MEDIA_PATH  = 'media_path';
 
     /**
      * The promotion pdf field
      */
-    const PDF         = 'pdf';
+    public const PDF         = 'pdf';
 
     /**
      * The promotion link field
      */
-    const LINK        = 'link';
+    public const LINK        = 'link';
 
     /**
      * The promotion retailer_id field
      */
-    const RETAILER_ID = 'retailer_id';
+    public const RETAILER_ID = 'retailer_id';
 
     /**
      * The promotion created_at field
      */
-    const CREATED_AT  = 'created_at';
+    public const CREATED_AT  = 'created_at';
 
     /**
      * The promotion end_at field
      */
-    const END_AT      = 'end_at';
+    public const END_AT      = 'end_at';
 
     /**
      * Get ID.
@@ -162,7 +152,6 @@ interface PromotionInterface
      * Set ID.
      *
      * @param int $promotionId Promotion ID.
-     *
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setId($promotionId);
@@ -171,7 +160,6 @@ interface PromotionInterface
      * Set title.
      *
      * @param string $title Title.
-     *
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setTitle($title);
@@ -180,7 +168,6 @@ interface PromotionInterface
      * Set description.
      *
      * @param string $description Description.
-     *
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setDescription($description);
@@ -189,7 +176,6 @@ interface PromotionInterface
      * Set status.
      *
      * @param int $status Status.
-     *
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setStatus($status);
@@ -197,8 +183,7 @@ interface PromotionInterface
     /**
      * Set is_active.
      *
-     * @param boolean $isActive Is active.
-     *
+     * @param bool $isActive Is active.
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setIsActive($isActive);
@@ -207,7 +192,6 @@ interface PromotionInterface
      * Set media path.
      *
      * @param string $path Media file path;
-     *
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setMediaPath($path);
@@ -216,7 +200,6 @@ interface PromotionInterface
      * Set pdf.
      *
      * @param string $pdf Pdf.
-     *
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setPdf($pdf);
@@ -225,7 +208,6 @@ interface PromotionInterface
      * Set link.
      *
      * @param string $link Link.
-     *
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setLink($link);
@@ -234,7 +216,6 @@ interface PromotionInterface
      * Set retailer id.
      *
      * @param int $retailerId Retailer Id.
-     *
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setRetailerId($retailerId);
@@ -243,7 +224,6 @@ interface PromotionInterface
      * Set created at.
      *
      * @param string $createdAt Created at.
-     *
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setCreatedAt($createdAt);
@@ -252,7 +232,6 @@ interface PromotionInterface
      * Set end at.
      *
      * @param string $endAt End at.
-     *
      * @return \Smile\RetailerPromotion\Api\Data\PromotionInterface
      */
     public function setEndAt($endAt);

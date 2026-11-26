@@ -1,52 +1,22 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Model\Promotion\Form;
 
-use Smile\RetailerPromotion\Model\ResourceModel\Promotion\CollectionFactory;
-use Smile\RetailerPromotion\Api\Data\PromotionInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\DataProvider\AbstractDataProvider;
+use Smile\RetailerPromotion\Api\Data\PromotionInterface;
+use Smile\RetailerPromotion\Model\ResourceModel\Promotion\CollectionFactory;
 
-/**
- * DataProvider
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
- */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends AbstractDataProvider
 {
-    /**
-     * @var \Smile\RetailerPromotion\Model\ResourceModel\Promotion\Collection
-     */
+    // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
     protected $collection;
 
-    /**
-     * @var DataPersistorInterface
-     */
-    protected $dataPersistor;
-
-    /**
-     * @var array
-     */
-    protected $loadedData;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
+    protected array $loadedData;
 
     /**
      * Constructor
@@ -61,18 +31,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array                         $data              Data.
      */
     public function __construct(
-        $name,
-        $primaryFieldName,
-        $requestFieldName,
+        string $name,
+        string $primaryFieldName,
+        string $requestFieldName,
         CollectionFactory $collectionFactory,
-        DataPersistorInterface $dataPersistor,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        protected DataPersistorInterface $dataPersistor,
+        protected StoreManagerInterface $storeManager,
         array $meta = [],
         array $data = []
     ) {
         $this->collection    = $collectionFactory->create();
-        $this->dataPersistor = $dataPersistor;
-        $this->storeManager  = $storeManager;
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
@@ -80,10 +48,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Get data
      *
-     * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getData()
+    public function getData(): array
     {
         if (isset($this->loadedData)) {
             return $this->loadedData;
@@ -111,19 +78,19 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get media Url.
      *
      * @param PromotionInterface $promotion Promotion.
-     *
-     * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getMediaUrl(PromotionInterface $promotion)
+    protected function getMediaUrl(PromotionInterface $promotion): array
     {
-        $mediaUrl = $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA );
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->storeManager->getStore();
+        $mediaUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
 
         return [
             0 => [
                 'name' => $promotion->getMediaPath(),
-                'url' => $mediaUrl.'retailerpromotion/'.$promotion->getMediaPath()
-            ]
+                'url' => $mediaUrl . 'retailerpromotion/' . $promotion->getMediaPath(),
+            ],
         ];
     }
 }

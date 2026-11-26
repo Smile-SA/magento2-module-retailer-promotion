@@ -1,112 +1,49 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\RetailerPromotion\Model;
 
+use Exception;
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface as CollectionProcessor;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Smile\RetailerPromotion\Api\Data\PromotionInterfaceFactory;
 use Smile\RetailerPromotion\Api\Data\PromotionInterface;
-use Smile\RetailerPromotion\Api\Data\PromotionSearchResultsInterface;
+use Smile\RetailerPromotion\Api\Data\PromotionInterfaceFactory;
 use Smile\RetailerPromotion\Api\Data\PromotionSearchResultsInterfaceFactory;
 use Smile\RetailerPromotion\Api\PromotionRepositoryInterface;
 use Smile\RetailerPromotion\Model\ResourceModel\Promotion as PromotionResourceModel;
 use Smile\RetailerPromotion\Model\ResourceModel\Promotion\CollectionFactory as PromotionCollectionFactory;
 
 /**
- * Promotion Repository
- *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PromotionRepository implements PromotionRepositoryInterface
 {
     /**
-     * @var PromotionInterfaceFactory
-     */
-    protected $objectFactory;
-
-    /**
-     * @var PromotionResourceModel
-     */
-    protected $objectResource;
-
-    /**
-     * @var PromotionSearchResultsInterfaceFactory
-     */
-    protected $searchResultsFactory;
-
-    /**
-     * @var CollectionProcessor
-     */
-    protected $collectionProcessor;
-
-    /**
-     * @var FilterBuilder
-     */
-    protected $filterBuilder;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var PromotionCollectionFactory
-     */
-    protected $promotionCollectionFactory;
-    /**
      * Item constructor.
-     *
-     * @param PromotionInterfaceFactory              $objectFactory
-     * @param PromotionResourceModel                 $objectResource
-     * @param PromotionSearchResultsInterfaceFactory $searchResultsFactory
-     * @param CollectionProcessor                    $collectionProcessor
-     * @param FilterBuilder                          $filterBuilder
-     * @param SearchCriteriaBuilder                  $searchCriteriaBuilder
-     * @param PromotionCollectionFactory             $promotionCollectionFactory
      */
     public function __construct(
-        PromotionInterfaceFactory $objectFactory,
-        PromotionResourceModel $objectResource,
-        PromotionSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionProcessor $collectionProcessor,
-        FilterBuilder $filterBuilder,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        PromotionCollectionFactory $promotionCollectionFactory
+        protected PromotionInterfaceFactory $objectFactory,
+        protected PromotionResourceModel $objectResource,
+        protected PromotionSearchResultsInterfaceFactory $searchResultsFactory,
+        protected CollectionProcessor $collectionProcessor,
+        protected FilterBuilder $filterBuilder,
+        protected SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected PromotionCollectionFactory $promotionCollectionFactory
     ) {
-        $this->objectFactory              = $objectFactory;
-        $this->objectResource             = $objectResource;
-        $this->searchResultsFactory       = $searchResultsFactory;
-        $this->collectionProcessor        = $collectionProcessor;
-        $this->filterBuilder              = $filterBuilder;
-        $this->searchCriteriaBuilder      = $searchCriteriaBuilder;
-        $this->promotionCollectionFactory = $promotionCollectionFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($promotionId)
     {
-        /** @var \Magento\Framework\Model\AbstractModel $object */
+        /** @var \Smile\RetailerPromotion\Model\Promotion $object */
         $object = $this->objectFactory->create();
         $this->objectResource->load($object, $promotionId);
 
@@ -118,7 +55,7 @@ class PromotionRepository implements PromotionRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getByRetailerId($retailerId)
     {
@@ -137,18 +74,16 @@ class PromotionRepository implements PromotionRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Smile\RetailerPromotion\Model\ResourceModel\Promotion\Collection $collection */
         $collection = $this->promotionCollectionFactory->create();
 
         $searchResults = $this->searchResultsFactory->create();
-        if ($searchCriteria) {
-            $searchResults->setSearchCriteria($searchCriteria);
-            $this->collectionProcessor->process($searchCriteria, $collection);
-        }
+        $searchResults->setSearchCriteria($searchCriteria);
+        $this->collectionProcessor->process($searchCriteria, $collection);
 
         $collection->load();
         $searchResults->setTotalCount($collection->getSize());
@@ -158,13 +93,14 @@ class PromotionRepository implements PromotionRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(PromotionInterface $promotion)
     {
         try {
+            /** @var \Smile\RetailerPromotion\Model\Promotion $promotion */
             $this->objectResource->save($promotion);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
 
@@ -172,22 +108,25 @@ class PromotionRepository implements PromotionRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(PromotionInterface $promotion)
     {
         try {
+            /** @var \Smile\RetailerPromotion\Model\Promotion $promotion */
             $this->objectResource->delete($promotion);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
+
+        return true;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($promotionId)
     {
-        $this->delete($this->get($promotionId));
+        return $this->delete($this->get($promotionId));
     }
 }
